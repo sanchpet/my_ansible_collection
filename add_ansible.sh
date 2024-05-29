@@ -80,8 +80,9 @@ create_user_with_key() {
     sudo useradd -s /bin/bash ansible 
     sudo mkdir -p /home/ansible/.ssh
     sudo echo $(cat ${FILE-}) > /home/ansible/.ssh/authorized_keys
-    chown -R ansible:ansible /home/ansible
-    chmod -R 700 /home/ansible
+    sudo chown -R ansible:ansible /home/ansible
+    sudo chmod -R 700 /home/ansible
+    sudo echo \"ansible ALL=(ALL:ALL) NOPASSWD: ALL\" > /etc/sudoers.d/ansible
   "
 }
 

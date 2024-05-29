@@ -3,4 +3,4 @@
   remote_user: root
 
   roles:
-  - roles/rhel9/common/root
+  - roles/rhel9/common

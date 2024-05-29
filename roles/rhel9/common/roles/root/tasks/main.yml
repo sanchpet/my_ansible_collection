@@ -1,11 +1,7 @@
-- name: Create user "{{ item.name }}"
+- name: Disable root password
   user:
-    name: "{{ item.name }}"
-    uid: "{{ item.uid }}"
-    createhome: true
-    append: true
-    shell: /bin/bash
-  loop: "{{ root_users }}"
+    name: 'root'
+    password: '!'
   tags:
+    - common
     - root
-    - root-users
