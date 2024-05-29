@@ -1,13 +1,3 @@
-- name: Create group "{{ item.name }}"
-  group:
-    name: "{{ item.name }}"
-    uid: "{{ item.gid }}"
-    state: present
-  loop: "{{ root_groups }}"
-  tags:
-    - root
-    - root-users
-
 - name: Create user "{{ item.name }}"
   user:
     name: "{{ item.name }}"
@@ -19,30 +9,3 @@
   tags:
     - root
     - root-users
-
-- name: Creating ansible user
-  block:
-    - name: Ansible user
-      user:
-        name: "{{ ansible_user.name }}"
-        uid: "{{ ansible_user.uid }}"
-        createhome: true
-        shell: /bin/bash
-
-    - name: SSH directory
-      file:
-        path: /home/ansible/.ssh
-        state: directory
-        mode: 0700
-        owner: "{{ ansible_user.name }}"
-        group: "{{ ansible_user.name }}"
-
-    - name: Authorized key for SSH
-      authorized_key:
-        user: "{{ ansible_user.name }}"
-        exclusive: yes
-        key: "{{ lookup('file', 'ansible_authorized_key') }}"
-  tags:
-    - common
-    - root
-    - ansible-user

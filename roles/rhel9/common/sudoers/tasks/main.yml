@@ -1,0 +1,11 @@
+- name: Sudoers defaults
+  copy:
+    src: sudoers
+    dest: /etc/sudoers
+    owner: root
+    group: root
+    mode: 0440
+    validate: "/usr/sbin/visudo -cf %s"
+  tags:
+    - common
+    - sudoers
