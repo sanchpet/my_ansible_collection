@@ -10,6 +10,9 @@
   yum:
     name: epel-release
     state: present
+  tags: 
+    - common
+    - common-packages
 
 - name: Install common packages
   yum:
