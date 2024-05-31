@@ -1,0 +1,27 @@
+---
+journald_storage: auto
+journald_compress: yes
+journald_seal: yes
+journald_splitmode: uid
+journald_syncintervalsec: 5m
+journald_ratelimitinterval: 30s
+journald_ratelimitburst: 1000
+journald_systemmaxuse: 500M
+journald_systemkeepfree:
+journald_systemmaxfilesize:
+journald_runtimemaxuse:
+journald_runtimekeepfree:
+journald_runtimemaxfilesize:
+journald_maxretentionsec:
+journald_maxfilesec: 1month
+journald_forwardtosyslog: yes
+journald_forwardtokmsg: no
+journald_forwardtoconsole: no
+journald_forwardtowall: yes
+journald_ttypath: /dev/console
+journald_maxlevelstore: debug
+journald_maxlevelsyslog: debug
+journald_maxlevelkmsg: notice
+journald_maxlevelconsole: info
+journald_maxlevelwall: emerg
+...

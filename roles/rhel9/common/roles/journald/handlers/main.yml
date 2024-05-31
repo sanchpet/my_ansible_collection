@@ -1,0 +1,10 @@
+- name: restart journald
+  service:
+    name: systemd-journald.service
+    state: restarted
+  
+- name: restart rsyslog
+  service:
+    name: rsyslog.service
+    state: restarted
+

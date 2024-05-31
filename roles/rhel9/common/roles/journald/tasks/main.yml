@@ -1,0 +1,15 @@
+- name: Journald config
+  template:
+    src: etc/systemd/journald.conf
+    dest: /etc/systemd/journald.conf
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - restart journald
+    - restart rsyslog
+  tags:
+    - common
+    - journald
+    - journaldconf
+
