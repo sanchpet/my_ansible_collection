@@ -1,6 +1,0 @@
-- name: Apply configuration for my test host
-  hosts: my_first_host
-  remote_user: root
-
-  roles:
-  - roles/rhel9/common

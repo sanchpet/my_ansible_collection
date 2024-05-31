@@ -1,0 +1,6 @@
+- name: Basic RHEL9 setup with only common settings
+  hosts: rhel9              # change this according to your inventory
+  remote_user: root
+
+  roles:
+  - roles/rhel9/common
