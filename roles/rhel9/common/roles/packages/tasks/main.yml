@@ -28,6 +28,7 @@
       - iotop
       - telnet
       - pwgen
+      - bind-utils
   tags: 
     - common
     - common-packages

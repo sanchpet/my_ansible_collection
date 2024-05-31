@@ -1,0 +1,11 @@
+- name: Put sshd custom config
+  template:
+    src: 00-custom-ssh.conf.j2
+    dest: /etc/ssh/sshd_config.d/00-custom-ssh.conf
+    owner: root
+    group: root
+    mode: 0600
+  notify: Restart sshd service
+  tags:
+    - common
+    - sshd

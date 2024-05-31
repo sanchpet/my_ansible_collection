@@ -1,0 +1,2 @@
+sshd_PasswordAuthentication: 'no'
+sshd_PubkeyAuthentication: 'yes'

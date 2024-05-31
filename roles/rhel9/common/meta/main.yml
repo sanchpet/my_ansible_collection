@@ -5,4 +5,5 @@ dependencies:
   - { role: 'common/roles/iptables' }
   - { role: 'common/roles/journald' }
   - { role: 'common/roles/packages' }
+  - { role: 'common/roles/sshd' }
 

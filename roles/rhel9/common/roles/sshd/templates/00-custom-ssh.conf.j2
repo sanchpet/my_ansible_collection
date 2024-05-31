@@ -1,0 +1,2 @@
+{%if sshd_PasswordAuthentication is none %}#{% endif %}PasswordAuthentication {{ sshd_PasswordAuthentication }}
+{%if sshd_PubkeyAuthentication is none %}#{% endif %}PubkeyAuthentication {{ sshd_PubkeyAuthentication }}
