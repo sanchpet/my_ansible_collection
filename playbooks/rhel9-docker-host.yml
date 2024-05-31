@@ -1,5 +1,5 @@
 - name: Setup RHEL9 as docker host machine
-  hosts: rhel9              # change this according to your inventory
+  hosts: rhel9-docker-host              # change this according to your inventory
   remote_user: root
 
   roles:

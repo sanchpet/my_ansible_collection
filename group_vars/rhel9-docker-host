@@ -1,0 +1,6 @@
+iptables:
+  external:
+    - name: nginx http
+      tcp: 80
+    - name: nginx https
+      tcp: 443
