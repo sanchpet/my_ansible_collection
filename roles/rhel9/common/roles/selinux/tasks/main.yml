@@ -1,0 +1,16 @@
+- name: Disable SELinux
+  selinux:
+    state: permissive
+    policy: targeted
+  register: selinux
+  when: selinux_disabled
+  tags:
+    - common
+    - selinux
+
+- name: Disable SELinux now
+  command: setenforce 0
+  when: selinux_disabled and selinux.changed
+  tags:
+    - common
+    - selinux

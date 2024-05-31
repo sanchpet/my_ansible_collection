@@ -1,7 +1,7 @@
-- name: Sudoers defaults
-  copy:
-    src: sudoers
-    dest: /etc/sudoers
+- name: Add extra sudoers
+  template:
+    src: extra_sudoers.j2
+    dest: /etc/sudoers.d/extra_sudoers
     owner: root
     group: root
     mode: 0440

@@ -1,4 +1,5 @@
 dependencies:
+  - { role: 'common/roles/selinux' }
   - { role: 'common/roles/root' }
   - { role: 'common/roles/sudoers' }
 

@@ -1,0 +1,25 @@
+{% if sudoers is defined %}
+{% if sudoers.group is defined %}
+{% for group in sudoers.group %}
+{% if group.all is defined and group.all == True %}
+%{{ group.name }} ALL=(ALL) NOPASSWD: ALL
+{% else %}
+{% for cmd in group.cmd %}
+%{{ group.name }} NOPASSWD:{{ cmd }}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
+ 
+{% if sudoers.user is defined %}
+{% for user in sudoers.user %}
+{% if user.all is defined and user.all == True %}
+{{ user.name }} ALL=(ALL) NOPASSWD: ALL
+{% else %}
+{% for cmd in user.cmd %}
+{{ user.name }} NOPASSWD:{{ cmd }}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}

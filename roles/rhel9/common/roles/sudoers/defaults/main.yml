@@ -1,0 +1,4 @@
+sudoers:
+  user:
+    - name: sanchpet
+      all: true
