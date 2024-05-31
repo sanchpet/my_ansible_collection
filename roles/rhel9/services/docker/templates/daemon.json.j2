@@ -1,0 +1,7 @@
+{
+    {% for param in docker_daemon_json %}
+    {{ param }}{% if loop.index != loop.length %},
+{% endif %}
+    {% endfor %}
+
+}
