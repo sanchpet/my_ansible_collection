@@ -1,0 +1,47 @@
+*filter
+
+-P INPUT ACCEPT
+-P OUTPUT ACCEPT
+-P FORWARD DROP
+
+-N TCP
+-N UDP
+
+# Apply packets with RELATED, ESTABLISHED states
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+# Apply all packages on lo interfaces
+-A INPUT -i lo -j ACCEPT
+
+# DROP all packages with INVALID state
+-A INPUT -m conntrack --ctstate INVALID -j DROP
+
+# Allow pings
+-A INPUT -s fe80::/64 -p ipv6-icmp -j ACCEPT
+-A INPUT -s 2a02:408:7722:54::/64 -p ipv6-icmp -j ACCEPT
+-A INPUT -p ipv6-icmp --icmpv6-type echo-request -m conntrack --ctstate NEW -j ACCEPT
+
+# CHAIN ROUTINES
+-A INPUT -p tcp --syn -m conntrack --ctstate NEW -j TCP
+-A INPUT -p udp -m conntrack --ctstate NEW -j UDP
+
+# REJECT OTHERS
+-A INPUT -p tcp -j REJECT --reject-with tcp-reset
+-A INPUT -p udp -j REJECT --reject-with icmp6-adm-prohibited
+-A INPUT -j REJECT --reject-with icmp6-adm-prohibited
+
+{% if ip6tables is defined %}
+{% for rule in ip6tables %}
+# {{ rule.name }}
+{% if rule.tcp is defined %}
+-A TCP -p tcp {% if rule.src is defined %} -s {{ rule.src }} {% endif %} {% if rule.dst is defined %} -d {{ rule.dst }} {% endif %} {%if rule.multiport is defined and rule.multiport == True %} -m multiport --dports {{ rule.tcp }} {% else %} --dport {{ rule.tcp }} {% endif %} -j ACCEPT
+{% endif %}
+{% if rule.udp is defined %}
+-A UDP -p udp {% if rule.src is defined %} -s {{ rule.src }} {% endif %} {% if rule.dst is defined %} -d {{ rule.dst }} {% endif %} {%if rule.multiport is defined and rule.multiport == True %} -m multiport --dports {{ rule.udp }} {% else %} --dport {{ rule.udp }} {% endif %} -j ACCEPT
+{% endif %}
+{% endfor %}
+{% endif %}
+
+-A TCP -j RETURN
+-A UDP -j RETURN
+COMMIT

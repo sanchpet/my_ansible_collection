@@ -1,0 +1,68 @@
+*filter
+
+-P INPUT ACCEPT
+-P OUTPUT ACCEPT
+-P FORWARD DROP
+
+-N TCP_EXT
+-N TCP_INT
+-N UDP_EXT
+-N UDP_INT
+
+# Apply packets with RELATED, ESTABLISHED states
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+# Apply all packages on lo interfaces
+-A INPUT -i lo -j ACCEPT
+
+# DROP all packages with INVALID state
+-A INPUT -m conntrack --ctstate INVALID -j DROP
+
+# Allow pings
+-A INPUT -p icmp --icmp-type echo-request -m conntrack --ctstate NEW -j ACCEPT
+
+# CHAIN ROUTINES
+-A INPUT -p tcp -s 10.0.0.0/8 --syn -m conntrack --ctstate NEW -j TCP_INT
+-A INPUT -p tcp --syn -m conntrack --ctstate NEW -j TCP_EXT
+-A INPUT -p udp -s 10.0.0.0/8 -m conntrack --ctstate NEW -j UDP_INT
+-A INPUT -p udp -m conntrack --ctstate NEW -j UDP_EXT
+
+# REJECT OTHERS
+-A INPUT -p tcp -j REJECT --reject-with tcp-reset
+-A INPUT -p udp -j REJECT --reject-with icmp-port-unreachable
+-A INPUT -j REJECT --reject-with icmp-proto-unreachable
+
+# TCP CHAIN
+#Enable ssh via external by default
+-A TCP_EXT -p tcp --dport 22 -j ACCEPT
+
+{% if iptables is defined %}
+{% if iptables.internal is defined %}
+{% for rule in iptables.internal %}
+# {{ rule.name }}
+{% if rule.tcp is defined %}
+-A TCP_INT -p tcp {% if rule.src is defined %} -s {{ rule.src }} {% endif %} {% if rule.dst is defined %} -d {{ rule.dst }} {% endif %} {%if rule.multiport is defined and rule.multiport == True %} -m multiport --dports {{ rule.tcp }} {% else %} --dport {{ rule.tcp }} {% endif %} -j ACCEPT
+{% endif %}
+{% if rule.udp is defined %}
+-A UDP_INT -p udp {% if rule.src is defined %} -s {{ rule.src }} {% endif %} {% if rule.dst is defined %} -d {{ rule.dst }} {% endif %} {%if rule.multiport is defined and rule.multiport == True %} -m multiport --dports {{ rule.udp }} {% else %} --dport {{ rule.udp }} {% endif %} -j ACCEPT
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if iptables.external is defined %}
+{% for rule in iptables.external %}
+# {{ rule.name }}
+{% if rule.tcp is defined %}
+-A TCP_EXT -p tcp {% if rule.src is defined %} -s {{ rule.src }} {% endif %} {% if rule.dst is defined %} -d {{ rule.dst }} {% endif %} {%if rule.multiport is defined and rule.multiport == True %} -m multiport --dports {{ rule.tcp }} {% else %} --dport {{ rule.tcp }} {% endif %} -j ACCEPT
+{% endif %}
+{% if rule.udp is defined %}
+-A UDP_EXT -p udp {% if rule.src is defined %} -s {{ rule.src }} {% endif %} {% if rule.dst is defined %} -d {{ rule.dst }} {% endif %} {%if rule.multiport is defined and rule.multiport == True %} -m multiport --dports {{ rule.udp }} {% else %} --dport {{ rule.udp }} {% endif %} -j ACCEPT
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+
+-A TCP_INT -j RETURN
+-A UDP_INT -j RETURN
+-A TCP_EXT -j RETURN
+-A UDP_EXT -j RETURN
+COMMIT

@@ -1,0 +1,40 @@
+- name: Delete firewalld
+  yum:
+    name: firewalld
+    state: absent
+  tags:
+    - common
+    - iptables
+
+- name: Install iptables
+  yum:
+    name: iptables-services
+  tags:
+    - common
+    - iptables
+
+- name: Enable iptables
+  service:
+    name: "{{ item }}.service"
+    state: started
+    enabled: true
+  loop:
+    - iptables
+    - ip6tables
+  tags:
+    - common
+    - iptables
+
+- name: Install iptables rules
+  template:
+    src: "{{ item }}.j2"
+    dest: /etc/sysconfig/{{ item }}
+  loop:
+    - iptables
+    - ip6tables
+  notify:
+    - restart iptables
+    - restart ip6tables
+  tags:
+    - common
+    - iptables
