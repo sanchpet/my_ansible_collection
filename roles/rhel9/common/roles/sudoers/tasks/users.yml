@@ -1,0 +1,28 @@
+- name: Perform tasks to create users
+  block:
+  
+  - name: Create user {{ item.name }}
+    user:
+      name: "{{ item.name }}"
+      shell: /bin/bash
+      createhome: true
+
+  - name: SSH directory for {{ item.name }}
+    file:
+      path: "/home/{{ item.name }}/.ssh"
+      state: directory
+      mode: 0700
+      owner: "{{ item.name }}"
+      group: "{{ item.name }}"
+
+  - name: Authorized key for SSH
+    authorized_key:
+      user: "{{ item.name }}"
+      exclusive: yes
+      key: "{{ lookup('file', item.authorized_key) }}"
+    when: item.authorized_key is defined
+
+  when: item.create_user is defined and item.create_user == true
+  tags:
+    - common
+    - sudoers

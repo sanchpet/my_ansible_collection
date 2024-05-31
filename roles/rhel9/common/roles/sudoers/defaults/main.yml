@@ -2,3 +2,5 @@ sudoers:
   user:
     - name: sanchpet
       all: true
+      create_user: true
+      authorized_key: sanchpet_key

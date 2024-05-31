@@ -9,3 +9,11 @@
   tags:
     - common
     - sudoers
+
+- name: Perform tasks to create sudoers users
+  include_tasks: users.yml
+  loop: "{{ sudoers.user }}"
+  when: sudoers.user is defined
+  tags:
+    - common
+    - sudoers
