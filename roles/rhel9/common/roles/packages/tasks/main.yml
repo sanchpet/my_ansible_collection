@@ -1,0 +1,30 @@
+- name: Upgrade packages
+  yum:
+    name: "*"
+    state: latest
+  tags: 
+    - common
+    - common-packages
+
+- name: Install package epel-release
+  yum:
+    name: epel-release
+    state: present
+
+- name: Install common packages
+  yum:
+    state: present
+    name:
+      - vim
+      - screen
+      - atop
+      - lsof
+      - tree
+      - git
+      - lshw
+      - iotop
+      - telnet
+      - pwgen
+  tags: 
+    - common
+    - common-packages
