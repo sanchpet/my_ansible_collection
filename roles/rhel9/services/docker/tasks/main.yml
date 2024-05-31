@@ -32,14 +32,16 @@
 
 - name: Docker-cfg
   template: 
-    src: etc/docker/daemon.json.j2 
+    src: daemon.json.j2 
     dest: /etc/docker/daemon.json 
     mode: 644 
     owner: root 
     group: root
   when: docker_daemon_json is defined
   notify: restart docker
-  tags: docker
+  tags: 
+    - docker
+    - docker-daemon-json
 
 - name: Install Docker Compose
   get_url:
